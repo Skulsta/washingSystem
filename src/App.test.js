@@ -1,7 +1,5 @@
-// import { render, screen } from "@testing-library/react";
-// import App from "./App";
-const Users = require("./functions/Users");
-const WashingSystem = require("./functions/WashingSystem");
+import Users from "./functions/Users";
+import WashingSystem from "./functions/WashingSystem";
 
 const users = new Users();
 const washing = new WashingSystem(12);
