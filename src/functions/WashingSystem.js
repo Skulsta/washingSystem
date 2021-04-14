@@ -16,7 +16,7 @@ module.exports = class WashingSystem {
       id: this.machines.length + 1,
       bookings: [],
     };
-    return this.machines.push(machine);
+    this.machines.push(machine);
   };
 
   getAllMachines = () => this.machines;
@@ -31,30 +31,20 @@ module.exports = class WashingSystem {
   };
   getPrograms = () => this.programs;
 
-  isAlreadyBooked = (time) => {
-    this.machines.map((machine) => {
-      return machine.bookings.map((booking) => {
-        return (
-          booking.startTime < time.endTime || booking.endTime > time.startTime
-        );
-      });
-    });
-  };
-
-  addBooking = (user, startTime, program) => {
+  addBooking = (user, startTime, programTime) => {
+    let availableMachine;
+    // Check which machine is available at the given time slot.
+    availableMachine = this.machines[0];
+    const endTime = new Date(
+      startTime.getTime() + parseInt(programTime * 60000)
+    );
     const booking = {
       user: user,
       startTime: startTime,
-      endTime: startTime + program.time,
-      program: program,
+      endTime: endTime,
+      machineId: availableMachine.id,
     };
-    this.machines[0].bookings.push(booking);
+    availableMachine.bookings.push(booking);
     return booking;
-  };
-
-  isAvailable = (machineBooking, newDate) => {
-    return (
-      newDate < machineBooking.startTime && newDate > machineBooking.endTime
-    );
   };
 };
