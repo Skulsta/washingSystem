@@ -18,7 +18,11 @@ const Home = () => {
   const bookMachine = (event) => {
     event.preventDefault();
     const bookedTime = new Date(date + " " + time);
-    system.addBooking(activeUser, bookedTime, programTime);
+    const endTime = new Date(
+      bookedTime.getTime() + parseInt(programTime * 60000)
+    );
+    console.log(endTime);
+    system.addBooking(activeUser, bookedTime, endTime);
     console.log(system.getAllBookings());
   };
 
@@ -95,10 +99,13 @@ const Home = () => {
             </button>
           </form>
         </div>
-        {true === false && (
+        {1 === 2 && (
           <div className="my-8 p-8 mx-auto border rounded leading-loose space-y-4">
             <h4 className="text-green-500 text-xl">Reservasjon fullført!</h4>
-            <p>Maskin: </p>
+            <p>
+              Vaskemaskin: system.getAllBookings([system.getAllBookings().length
+              - 1].id){" "}
+            </p>
           </div>
         )}
       </div>
