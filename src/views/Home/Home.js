@@ -7,7 +7,7 @@ const Home = () => {
   const users = new Users();
   const washingSystem = new WashingSystem(2);
 
-  const [activeUser, setActiveUser] = useState();
+  const [activeUser, setActiveUser] = useState(users.getAll()[0]);
   const [time, setTime] = useState("13:00");
   const [date, setDate] = useState();
   const [system] = useState(washingSystem);
@@ -18,9 +18,8 @@ const Home = () => {
   const bookMachine = (event) => {
     event.preventDefault();
     const bookedTime = new Date(date + " " + time);
-    console.log(programTime);
-    system.addBooking(activeUser, bookedTime, parseInt(programTime));
-    console.log(system.getAllBookings()[0]);
+    system.addBooking(activeUser, bookedTime, programTime);
+    console.log(system.getAllBookings());
   };
 
   return (

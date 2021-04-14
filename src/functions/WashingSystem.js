@@ -7,19 +7,20 @@ module.exports = class WashingSystem {
       { program: "Håndvask", time: 20 },
     ];
     for (var i = 1; i <= numberOfMachines; i++) {
-      this.addMachine();
+      this.addMachine(i);
     }
   }
 
-  addMachine = () => {
+  addMachine = (id) => {
     const machine = {
-      id: this.machines.length + 1,
+      id: id,
       bookings: [],
     };
     this.machines.push(machine);
   };
 
   getAllMachines = () => this.machines;
+
   getAllBookings = () => {
     const allBookings = [];
     this.machines.map((machine) => {
@@ -29,12 +30,18 @@ module.exports = class WashingSystem {
     });
     return allBookings;
   };
+
   getPrograms = () => this.programs;
 
   addBooking = (user, startTime, programTime) => {
-    let availableMachine;
     // Check which machine is available at the given time slot.
-    availableMachine = this.machines[0];
+    let availableMachine;
+    this.machines.find((machine) => {
+      if (this.isAvailable(machine)) {
+        return (availableMachine = machine);
+      } else return false;
+    });
+    if (!availableMachine) return;
     const endTime = new Date(
       startTime.getTime() + parseInt(programTime * 60000)
     );
@@ -46,5 +53,9 @@ module.exports = class WashingSystem {
     };
     availableMachine.bookings.push(booking);
     return booking;
+  };
+
+  isAvailable = (machine) => {
+    return !machine.bookings.length ? true : false;
   };
 };
