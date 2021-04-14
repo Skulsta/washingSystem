@@ -2,7 +2,7 @@ module.exports = class WashingSystem {
   constructor(numberOfMachines) {
     this.machines = [];
     this.bookings = [];
-    this.washPrograms = [
+    this.programs = [
       { program: "Kokvask", time: 90 },
       { program: "Tøyvask", time: 60 },
       { program: "Håndvask", time: 20 },
@@ -21,6 +21,7 @@ module.exports = class WashingSystem {
 
   getAllMachines = () => this.machines;
   getAllBookings = () => this.bookings;
+  getPrograms = () => this.programs;
 
   addBooking = () => {};
 };

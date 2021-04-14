@@ -1,19 +1,31 @@
 import React, { useState } from "react";
+import TimePicker from "react-time-picker";
 import Users from "../../functions/Users";
+import WashingSystem from "../../functions/WashingSystem";
 import MachineImage from "../../assets/images/washing-machine.jpg";
 
 const Home = () => {
-  const [user, setUser] = useState(null);
+  const [activeUser, setActiveUser] = useState(null);
+  const [time, setTime] = useState(new Date());
 
-  const selectUser = (user) => setUser(user);
+  const selectUser = (user) => setActiveUser(user);
 
   const users = new Users();
+  const system = new WashingSystem();
+
   return (
     <div className="max-w-screen-2xl flex flex-col mx-auto">
       <nav className="flex justify-end m-4">
-        {console.log(users.getAll())}
         {users.getAll().map((user) => (
-          <div onClick={() => selectUser(user)} key={user.id} className="mx-2">
+          <div
+            onClick={() => selectUser(user)}
+            key={user.id}
+            className={`${
+              activeUser &&
+              activeUser.fullName === user.fullName &&
+              "border-green-500"
+            } cursor-pointer m-2 border-b-2 border-white hover:border-green-500`}
+          >
             {user.fullName}
           </div>
         ))}
@@ -24,25 +36,38 @@ const Home = () => {
         </div>
         <div>
           <h2 className="text-2xl text-center text-gray-800">
-            Reserver tidspunkt for vask
+            Reservér tidspunkt for vask
           </h2>
-          <p className="text-lg text-center text-gray-600">Forklaring her</p>
+          <p className="text-lg text-center text-gray-600">
+            Velg program og tidspunkt
+          </p>
         </div>
-        <form action="submit" className="mx-auto">
-          <form className="flex flex-col space-y-4">
-            <label>
-              Tidspunkt:
-              <input
-                className="border-b text-center w-16 ml-4"
-                type="text"
-                placeholder="13:00"
-              />
-            </label>
-            <label>
-              Vaskeprogram:
-              <input className="border-b text-center w-16 ml-4" type="select" />
-            </label>
-          </form>
+        <form action="submit" className="mx-auto flex flex-col space-y-4">
+          <select name="program" id="program" className="">
+            {system.getPrograms().map((program) => (
+              <option key={program.id} value={program.time} className="mx-2">
+                {`${program.program} (${program.time} min)`}
+              </option>
+            ))}
+            {}
+          </select>
+          <TimePicker
+            id="time-picker"
+            onChange={setTime}
+            value={time}
+            locale="nb-NO"
+            minTime={new Date()}
+            required
+          />
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              console.log(activeUser);
+            }}
+            className="border p-2 bg-green-300 hover:bg-green-400"
+          >
+            Reservér
+          </button>
         </form>
       </div>
     </div>
