@@ -34,12 +34,19 @@ module.exports = class WashingSystem {
     });
   };
 
-  addBooking = (user, time, program) => {
+  addBooking = (user, startTime, program) => {
     const booking = {
       user: user,
-      time: time,
+      startTime: startTime,
+      endTime: startTime + program.time,
       program: program,
     };
     this.machines.bookings.push(booking);
+  };
+
+  isAvailable = (machineBooking, newDate) => {
+    return (
+      newDate < machineBooking.startTime && newDate > machineBooking.endTime
+    );
   };
 };

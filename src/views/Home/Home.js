@@ -1,13 +1,13 @@
 import React, { useState } from "react";
-import TimePicker from "react-time-picker";
 import Users from "../../functions/Users";
 import WashingSystem from "../../functions/WashingSystem";
 import MachineImage from "../../assets/images/washing-machine.jpg";
 
 const Home = () => {
   const [activeUser, setActiveUser] = useState(null);
-  const [time, setTime] = useState("10:00");
-  const [date, setDate] = useState("");
+  const [time, setTime] = useState("13:00");
+  const [date, setDate] = useState();
+  const [program, setProgram] = useState("");
 
   const selectUser = (user) => setActiveUser(user);
 
@@ -63,6 +63,9 @@ const Home = () => {
             id="program"
             className="border-b pb-2 outline-none"
           >
+            <option value="" className="mx-2">
+              Velg program
+            </option>
             {system.getPrograms().map((program) => (
               <option
                 key={program.program}
@@ -80,6 +83,7 @@ const Home = () => {
           />
           <input
             type="time"
+            value={time}
             className="border p-2 outline-none"
             onChange={(e) => setTime(e.target.value)}
           />
