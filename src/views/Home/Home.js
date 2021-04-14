@@ -7,22 +7,20 @@ const Home = () => {
   const [activeUser, setActiveUser] = useState(null);
   const [time, setTime] = useState("13:00");
   const [date, setDate] = useState();
-  const [program, setProgram] = useState("");
+  const [program, setProgram] = useState();
 
   const selectUser = (user) => setActiveUser(user);
 
   const users = new Users();
-  const system = new WashingSystem();
+  const system = new WashingSystem(12);
 
   const bookMachine = (event) => {
     event.preventDefault();
     const result = new Date(date + " " + time);
     console.log(result);
+    system.addBooking(activeUser, result, program);
+    console.log(system.getAllBookings());
   };
-
-  // const addMinutes = (minutes) => {
-  //   return new Date(time.getTime() + minutes * 60000);
-  // };
 
   return (
     <div className="max-w-screen-2xl flex flex-col mx-auto">
@@ -62,6 +60,7 @@ const Home = () => {
             name="program"
             id="program"
             className="border-b pb-2 outline-none"
+            onChange={(e) => setProgram(e.target.value)}
           >
             <option value="" className="mx-2">
               Velg program
