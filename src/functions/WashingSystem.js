@@ -15,6 +15,7 @@ module.exports = class WashingSystem {
   addMachine = () => {
     const machine = {
       id: this.machines.length + 1,
+      bookings: [],
     };
     return this.machines.push(machine);
   };
@@ -23,5 +24,22 @@ module.exports = class WashingSystem {
   getAllBookings = () => this.bookings;
   getPrograms = () => this.programs;
 
-  addBooking = () => {};
+  isAlreadyBooked = (time) => {
+    this.machines.map((machine) => {
+      machine.bookings.map((booking) => {
+        return (
+          booking.startTime < time.endTime || booking.endTime > time.startTime
+        );
+      });
+    });
+  };
+
+  addBooking = (user, time, program) => {
+    const booking = {
+      user: user,
+      time: time,
+      program: program,
+    };
+    this.machines.bookings.push(booking);
+  };
 };

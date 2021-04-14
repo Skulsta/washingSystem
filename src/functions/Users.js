@@ -10,7 +10,7 @@ module.exports = class Users {
   getAll = () => this.users;
 
   addUser = (fullName) => {
-    this.usersAdded = this.usersAdded + 1;
+    this.usersAdded = this.usersAdded += 1;
     const user = {
       id: this.usersAdded,
       fullName: fullName,

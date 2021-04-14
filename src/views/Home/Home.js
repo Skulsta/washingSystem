@@ -6,12 +6,23 @@ import MachineImage from "../../assets/images/washing-machine.jpg";
 
 const Home = () => {
   const [activeUser, setActiveUser] = useState(null);
-  const [time, setTime] = useState(new Date());
+  const [time, setTime] = useState("10:00");
+  const [date, setDate] = useState("");
 
   const selectUser = (user) => setActiveUser(user);
 
   const users = new Users();
   const system = new WashingSystem();
+
+  const bookMachine = (event) => {
+    event.preventDefault();
+    const result = new Date(date + " " + time);
+    console.log(result);
+  };
+
+  // const addMinutes = (minutes) => {
+  //   return new Date(time.getTime() + minutes * 60000);
+  // };
 
   return (
     <div className="max-w-screen-2xl flex flex-col mx-auto">
@@ -42,28 +53,38 @@ const Home = () => {
             Velg program og tidspunkt
           </p>
         </div>
-        <form action="submit" className="mx-auto flex flex-col space-y-4">
-          <select name="program" id="program" className="">
+        <form
+          action="submit"
+          onSubmit={bookMachine}
+          className="mx-auto flex flex-col space-y-8"
+        >
+          <select
+            name="program"
+            id="program"
+            className="border-b pb-2 outline-none"
+          >
             {system.getPrograms().map((program) => (
-              <option key={program.id} value={program.time} className="mx-2">
+              <option
+                key={program.program}
+                value={program.time}
+                className="mx-2"
+              >
                 {`${program.program} (${program.time} min)`}
               </option>
             ))}
-            {}
           </select>
-          <TimePicker
-            id="time-picker"
-            onChange={setTime}
-            value={time}
-            locale="nb-NO"
-            minTime={new Date()}
-            required
+          <input
+            type="date"
+            className="border p-2 outline-none"
+            onChange={(e) => setDate(e.target.value)}
+          />
+          <input
+            type="time"
+            className="border p-2 outline-none"
+            onChange={(e) => setTime(e.target.value)}
           />
           <button
-            onClick={(e) => {
-              e.preventDefault();
-              console.log(activeUser);
-            }}
+            type="submit"
             className="border p-2 bg-green-300 hover:bg-green-400"
           >
             Reservér
