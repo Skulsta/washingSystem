@@ -8,6 +8,7 @@ const Home = () => {
   const [time, setTime] = useState("13:00");
   const [date, setDate] = useState();
   const [program, setProgram] = useState();
+  const [bookings] = useState([]);
 
   const selectUser = (user) => setActiveUser(user);
 
@@ -16,10 +17,9 @@ const Home = () => {
 
   const bookMachine = (event) => {
     event.preventDefault();
-    const result = new Date(date + " " + time);
-    console.log(result);
-    system.addBooking(activeUser, result, program);
-    console.log(system.getAllBookings());
+    const bookedTime = new Date(date + " " + time);
+    bookings.push(system.addBooking(activeUser, bookedTime, program));
+    console.log(bookings);
   };
 
   return (

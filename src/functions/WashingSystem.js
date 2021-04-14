@@ -33,7 +33,7 @@ module.exports = class WashingSystem {
 
   isAlreadyBooked = (time) => {
     this.machines.map((machine) => {
-      machine.bookings.map((booking) => {
+      return machine.bookings.map((booking) => {
         return (
           booking.startTime < time.endTime || booking.endTime > time.startTime
         );
@@ -49,6 +49,7 @@ module.exports = class WashingSystem {
       program: program,
     };
     this.machines[0].bookings.push(booking);
+    return booking;
   };
 
   isAvailable = (machineBooking, newDate) => {
