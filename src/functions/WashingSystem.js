@@ -34,17 +34,17 @@ module.exports = class WashingSystem {
   getPrograms = () => this.programs;
 
   addBooking = (user, startTime, programTime) => {
+    const endTime = new Date(
+      startTime.getTime() + parseInt(programTime * 60000)
+    );
     // Check which machine is available at the given time slot.
     let availableMachine;
     this.machines.find((machine) => {
-      if (this.isAvailable(machine)) {
+      if (this.isAvailable(machine, startTime, endTime)) {
         return (availableMachine = machine);
       } else return false;
     });
     if (!availableMachine) return;
-    const endTime = new Date(
-      startTime.getTime() + parseInt(programTime * 60000)
-    );
     const booking = {
       user: user,
       startTime: startTime,
@@ -55,7 +55,18 @@ module.exports = class WashingSystem {
     return booking;
   };
 
-  isAvailable = (machine) => {
-    return !machine.bookings.length ? true : false;
+  isAvailable = (machine, startTime, endTime) => {
+    if (!machine.bookings.length) return true;
+    let availableMachine = true;
+    machine.bookings.find((booking) => {
+      if (
+        (startTime >= booking.startTime && startTime < booking.endTime) ||
+        (endTime > booking.startTime && endTime <= booking.endTime) ||
+        (startTime <= booking.startTime && !(endTime < booking.startTime))
+      ) {
+        return (availableMachine = false);
+      }
+    });
+    return availableMachine;
   };
 };
