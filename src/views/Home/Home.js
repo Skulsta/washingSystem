@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Users from "../../functions/Users";
 import WashingSystem from "../../functions/WashingSystem";
 import MachineImage from "../../assets/images/washing-machine.jpg";
+import UsersMenu from "../../components/UsersMenu";
 import Person1 from "../../assets/images/person-1.png";
 import Person2 from "../../assets/images/person-2.png";
 import Person3 from "../../assets/images/person-3.png";
