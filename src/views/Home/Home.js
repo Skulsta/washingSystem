@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Users from "../../functions/Users";
 import WashingSystem from "../../functions/WashingSystem";
 import MachineImage from "../../assets/images/washing-machine.jpg";
@@ -12,6 +12,9 @@ const Home = () => {
   const [date, setDate] = useState();
   const [system] = useState(washingSystem);
   const [programTime, setProgramTime] = useState();
+  const [newBooking, setNewBooking] = useState();
+  const [userBookings, setUserBookings] = useState(system.getAllBookings());
+  const [errorMessage, toggleErrorMessage] = useState(false);
 
   const selectUser = (user) => setActiveUser(user);
 
@@ -21,10 +24,22 @@ const Home = () => {
     const endTime = new Date(
       bookedTime.getTime() + parseInt(programTime * 60000)
     );
-    console.log(endTime);
-    system.addBooking(activeUser, bookedTime, endTime);
-    console.log(system.getAllBookings());
+    const booking = system.addBooking(activeUser, bookedTime, endTime);
+    if (!booking) return toggleErrorMessage(!errorMessage);
+    setNewBooking(booking);
+    updateUserBookings();
   };
+
+  const updateUserBookings = () => {
+    setUserBookings(system.getAllBookings());
+  };
+
+  useEffect(() => {
+    setUserBookings(system.getUserBookings(activeUser));
+    toggleErrorMessage(false);
+  }, [activeUser, setActiveUser, system]);
+
+  useEffect(() => {}, [setNewBooking]);
 
   return (
     <div className="max-w-screen-2xl min-h-screen flex flex-col mx-auto p-8">
@@ -43,12 +58,12 @@ const Home = () => {
           </div>
         ))}
       </nav>
-      <div className="mx-auto">
-        <div className="mt-12 py-8 px-16 mx-auto border rounded leading-loose space-y-8">
+      <div className="mx-auto flex mt-8 space-x-8">
+        <div className="py-8 px-16 mx-auto border rounded leading-loose">
           <div>
             <img className="w-40 mx-auto" src={MachineImage} alt="Profile" />
           </div>
-          <div>
+          <div className=" my-8">
             <h2 className="text-2xl text-center text-gray-800">
               Reservér tidspunkt for vask
             </h2>
@@ -99,15 +114,40 @@ const Home = () => {
             </button>
           </form>
         </div>
-        {1 === 2 && (
-          <div className="my-8 p-8 mx-auto border rounded leading-loose space-y-4">
-            <h4 className="text-green-500 text-xl">Reservasjon fullført!</h4>
-            <p>
-              Vaskemaskin: system.getAllBookings([system.getAllBookings().length
-              - 1].id){" "}
+        <div className="py-8 px-12 mx-auto border rounded leading-loose space-y-4">
+          <h5 className="text-xl text-green-600 text-center">
+            Velkommen {activeUser.fullName}
+          </h5>
+          {errorMessage && (
+            <p className="text-red-600">
+              Ingen tilgjengelige maskiner på dette tidspunktet
             </p>
-          </div>
-        )}
+          )}
+          {newBooking && newBooking.user === activeUser && (
+            <div className="border p-4">
+              <p className="text-lg">Ny reservasjon er registert:</p>
+              <p>Maskin: {newBooking.machineId}</p>
+              <p>Dato: {newBooking.startTime.toLocaleDateString("nb-NO")}</p>
+              <p>
+                Tidspunkt: {newBooking.startTime.toLocaleTimeString("nb-NO")}
+              </p>
+            </div>
+          )}
+          <p className="text-gray-700">Tidligere reservasjoner</p>
+          {userBookings.length > 0 &&
+            userBookings.map((booking) => {
+              if (booking.user === activeUser)
+                return (
+                  <div className="border p-4">
+                    <p>Maskin: {booking.machineId}</p>
+                    <p>Dato: {booking.startTime.toLocaleDateString("nb-NO")}</p>
+                    <p>
+                      Tidspunkt: {booking.startTime.toLocaleTimeString("nb-NO")}
+                    </p>
+                  </div>
+                );
+            })}
+        </div>
       </div>
     </div>
   );

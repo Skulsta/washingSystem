@@ -1,6 +1,7 @@
 module.exports = class WashingSystem {
   constructor(numberOfMachines) {
     this.machines = [];
+    this.numberOfBookingsIssued = 0;
     this.programs = [
       { program: "Kokvask", time: 90 },
       { program: "Tøyvask", time: 60 },
@@ -36,8 +37,9 @@ module.exports = class WashingSystem {
   addBooking = (user, startTime, endTime) => {
     const availableMachine = this.findAvailableMachine(startTime, endTime);
     if (!availableMachine) return false;
-
+    this.numberOfBookingsIssued += 1;
     const booking = {
+      id: this.numberOfBookingsIssued,
       user: user,
       startTime: startTime,
       endTime: endTime,
@@ -69,5 +71,14 @@ module.exports = class WashingSystem {
       }
     });
     return availableMachine;
+  };
+
+  getUserBookings = (user) => {
+    if (this.numberOfBookingsIssued === 0) return [];
+    const result = [];
+    this.getAllBookings().map((booking) => {
+      booking.user === user && result.push(booking);
+    });
+    return result;
   };
 };
