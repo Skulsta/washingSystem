@@ -26,6 +26,7 @@ const Home = () => {
     );
     const booking = system.addBooking(activeUser, bookedTime, endTime);
     if (!booking) return toggleErrorMessage(!errorMessage);
+    toggleErrorMessage(false);
     setNewBooking(booking);
     updateUserBookings();
   };
@@ -38,8 +39,6 @@ const Home = () => {
     setUserBookings(system.getUserBookings(activeUser));
     toggleErrorMessage(false);
   }, [activeUser, setActiveUser, system]);
-
-  useEffect(() => {}, [setNewBooking]);
 
   return (
     <div className="max-w-screen-2xl min-h-screen flex flex-col mx-auto p-8">
