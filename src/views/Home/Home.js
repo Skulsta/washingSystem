@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import Users from "../../functions/Users";
 import WashingSystem from "../../functions/WashingSystem";
 import MachineImage from "../../assets/images/washing-machine.jpg";
+import Person1 from "../../assets/images/person-1.png";
+import Person2 from "../../assets/images/person-2.png";
+import Person3 from "../../assets/images/person-3.png";
 
 const Home = () => {
   const users = new Users();
@@ -28,10 +31,6 @@ const Home = () => {
     if (!booking) return toggleErrorMessage(!errorMessage);
     toggleErrorMessage(false);
     setNewBooking(booking);
-    updateUserBookings();
-  };
-
-  const updateUserBookings = () => {
     setUserBookings(system.getAllBookings());
   };
 
@@ -39,6 +38,8 @@ const Home = () => {
     setUserBookings(system.getUserBookings(activeUser));
     toggleErrorMessage(false);
   }, [activeUser, setActiveUser, system]);
+
+  const profileImages = [Person1, Person2, Person3];
 
   return (
     <div className="max-w-screen-2xl min-h-screen flex flex-col mx-auto p-8">
@@ -51,8 +52,15 @@ const Home = () => {
               activeUser &&
               activeUser.fullName === user.fullName &&
               "border-green-500"
-            } cursor-pointer m-2 border-b-2 border-white hover:border-green-500`}
+            } cursor-pointer my-2 mx-4 border-b-2 border-white hover:border-green-500`}
           >
+            <div>
+              <img
+                className="w-12 mx-auto mb-2"
+                src={profileImages[user.id - 1]}
+                alt="Profile"
+              />
+            </div>
             {user.fullName}
           </div>
         ))}
